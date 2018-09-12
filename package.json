@@ -38,7 +38,7 @@
   "main": "lib/index.js",
   "oclif": {
     "commands": "./lib/commands",
-    "bin": "example-multi-ts",
+    "bin": "est",
     "plugins": [
       "@oclif/plugin-help"
     ]
