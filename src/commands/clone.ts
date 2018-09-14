@@ -49,6 +49,12 @@ export default class Clone extends Command {
     const repo = args.url;
     const parsed = parseGitUrl(repo);
     const baseDir = path.resolve(`${process.env.HOME}/Workspace`);
+
+    if (parsed.protocol !== 'ssh') {
+      spinner.fail(`Use ssh ! (you tried to use ${parsed.protocol})`);
+      return;
+    }
+
     const relativeDir = `/${parsed.source}/${parsed.organization}/${parsed.name}`;
     const targetPath = path.resolve(`${baseDir}/${relativeDir}`);
     if (clonableDestination(targetPath)) {
