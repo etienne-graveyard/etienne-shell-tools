@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { Ora } from 'ora';
 
 // function _checkout() {
 //   var args = ['checkout', opts.checkout];
@@ -12,20 +13,28 @@ import { spawn } from 'child_process';
 //   });
 // }
 
-export default async function gitClone(repo: string, targetPath: string): Promise<void> {
+export default async function gitClone(
+  spinner: Ora,
+  repo: string,
+  targetPath: string,
+  shallow: boolean = false
+): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const args = ['clone'];
 
-    // if (opts.shallow) {
-    //     args.push('--depth');
-    //     args.push('1');
-    // }
+    if (shallow) {
+      args.push('--depth');
+      args.push('1');
+    }
 
     args.push('--');
     args.push(repo);
     args.push(targetPath);
 
     let error: Array<string> = [];
+
+    spinner.info(`Executing: git ${args.join(' ')}`);
+    spinner.start(`Cloning...`);
 
     const process = spawn('git', args);
     process.stderr.on('data', function(data) {

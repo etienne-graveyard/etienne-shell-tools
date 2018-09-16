@@ -36,6 +36,7 @@ export default class Clone extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
+    shallow: flags.boolean({ char: 's' }),
   };
 
   static args = [{ name: 'url' }];
@@ -59,13 +60,11 @@ export default class Clone extends Command {
     const targetPath = path.resolve(`${baseDir}/${relativeDir}`);
     if (clonableDestination(targetPath)) {
       spinner.info(`Cloning in ${chalk.cyan(relativeDir)}`);
-      spinner.start(`Cloning...`);
-      await gitClone(repo, targetPath);
+      await gitClone(spinner, repo, targetPath, flags.shallow);
       spinner.succeed('Cloned');
     } else {
       spinner.info(`${chalk.cyan(relativeDir)} already exists, pulling repo`);
-      spinner.start(`Pulling...`);
-      await gitPull(targetPath);
+      await gitPull(spinner, targetPath);
       spinner.succeed('Pulled');
     }
     spinner.start('Openning in VS Code...');
