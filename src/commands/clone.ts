@@ -6,30 +6,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as ora from 'ora';
 import chalk from 'chalk';
-import { execSync } from 'child_process';
-
-function clonableDestination(target: string): boolean {
-  const targetExist = fs.existsSync(target);
-  if (!targetExist) {
-    return true;
-  }
-  const files = fs.readdirSync(target);
-  const targetEmpty = files.length === 0;
-  return targetEmpty;
-}
-
-function wait(time: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, time);
-  });
-}
-
-function execProm(command: string): Promise<void> {
-  return new Promise(resolve => {
-    execSync(command);
-    resolve();
-  });
-}
+import gitCloneOrPull from '../utils/gitCloneOrPull';
+import wait from '../utils/wait';
+import execProm from '../utils/execProm';
 
 export default class Clone extends Command {
   static description = 'clone a repo in the correct folder';
@@ -47,28 +26,14 @@ export default class Clone extends Command {
     const spinner = ora('Starting...').start();
     spinner.color = 'blue';
 
-    const repo = args.url;
-    const parsed = parseGitUrl(repo);
-    const baseDir = path.resolve(`${process.env.HOME}/Workspace`);
+    const cloneResult = await gitCloneOrPull(spinner, args.url, flags.shallow);
 
-    if (parsed.protocol !== 'ssh') {
-      spinner.fail(`Use ssh ! (you tried to use ${parsed.protocol})`);
+    if (!cloneResult) {
       return;
     }
 
-    const relativeDir = `/${parsed.source}/${parsed.organization}/${parsed.name}`;
-    const targetPath = path.resolve(`${baseDir}/${relativeDir}`);
-    if (clonableDestination(targetPath)) {
-      spinner.info(`Cloning in ${chalk.cyan(relativeDir)}`);
-      await gitClone(spinner, repo, targetPath, flags.shallow);
-      spinner.succeed('Cloned');
-    } else {
-      spinner.info(`${chalk.cyan(relativeDir)} already exists, pulling repo`);
-      await gitPull(spinner, targetPath);
-      spinner.succeed('Pulled');
-    }
     spinner.start('Openning in VS Code...');
-    await Promise.all([wait(500), execProm(`code ${targetPath}`)]);
+    await Promise.all([wait(500), execProm(`code ${cloneResult.targetPath}`)]);
     spinner.succeed('All good, Happy coding');
   }
 }
