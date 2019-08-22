@@ -34,8 +34,12 @@ export default async function gitCloneOrPull(spinner: ora.Ora, url: string, shal
     spinner.succeed('Cloned');
   } else {
     spinner.info(`${chalk.cyan(relativeDir)} already exists, pulling repo`);
-    await gitPull(spinner, targetPath);
-    spinner.succeed('Pulled');
+    try {
+      await gitPull(spinner, targetPath);
+      spinner.succeed('Pulled');
+    } catch (error) {
+      spinner.fail(error);
+    }
   }
 
   return { targetPath, name: parsed.name, url: relativeDir };

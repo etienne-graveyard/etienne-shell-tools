@@ -32,7 +32,7 @@ export default class Clone extends Command {
       return;
     }
 
-    spinner.start('Openning in VS Code...');
+    spinner.info('Openning in VS Code...');
     await Promise.all([wait(500), execProm(`code ${cloneResult.targetPath}`)]);
     spinner.succeed('All good, Happy coding');
   }

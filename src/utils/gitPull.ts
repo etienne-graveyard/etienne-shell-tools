@@ -18,7 +18,6 @@ export default async function gitPull(spinner: Ora, targetPath: string): Promise
       if (status == 0) {
         resolve();
       } else {
-        console.log(signal);
         reject(error.join('\n'));
       }
     });
