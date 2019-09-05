@@ -7,30 +7,30 @@
     "est": "./bin/run"
   },
   "dependencies": {
-    "@oclif/command": "^1.5.14",
-    "@oclif/config": "^1.13.0",
-    "@oclif/plugin-help": "^2.2.0",
+    "@oclif/command": "^1.5.18",
+    "@oclif/config": "^1.13.3",
+    "@oclif/plugin-help": "^2.2.1",
     "chalk": "^2.4.2",
     "git-url-parse": "^11.1.2",
     "got": "^9.6.0",
-    "inquirer": "^6.3.1",
+    "inquirer": "^7.0.0",
     "ora": "^3.4.0",
-    "prettier": "^1.17.1",
-    "tslib": "^1"
+    "prettier": "^1.18.2",
+    "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.22.0",
-    "@oclif/test": "^1.2.4",
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
     "@types/git-url-parse": "^9.0.0",
-    "@types/got": "^9.4.4",
-    "@types/inquirer": "^6.0.3",
+    "@types/got": "^9.6.7",
+    "@types/inquirer": "^6.5.0",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.0.4",
-    "@types/prettier": "^1.16.4",
-    "globby": "^9.2.0",
-    "mocha": "^6.1.4",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.5.1"
+    "@types/node": "^12.7.4",
+    "@types/prettier": "^1.18.2",
+    "globby": "^10.0.1",
+    "mocha": "^6.2.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
   },
   "engines": {
     "node": ">=8.0.0"
