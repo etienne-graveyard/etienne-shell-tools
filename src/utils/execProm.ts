@@ -18,7 +18,7 @@ export default function execProm(command: string, options: Options = {}): Promis
     const tab = '    ';
 
     const proc = exec(command, execOptions);
-    proc.stdout.on('data', function(data) {
+    proc.stdout!.on('data', function(data) {
       const str = noLineSplit
         ? data.toString()
         : data
@@ -29,7 +29,7 @@ export default function execProm(command: string, options: Options = {}): Promis
       console.log(noColor ? str : chalk.grey(str));
     });
 
-    proc.stderr.on('data', function(data) {
+    proc.stderr!.on('data', function(data) {
       const str = noLineSplit
         ? data.toString()
         : data
