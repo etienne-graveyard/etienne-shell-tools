@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 
 type Options = {
   cwd?: string;
@@ -18,7 +18,7 @@ export default function execProm(command: string, options: Options = {}): Promis
     const tab = '    ';
 
     const proc = exec(command, execOptions);
-    proc.stdout!.on('data', function(data) {
+    proc.stdout!.on('data', function (data) {
       const str = noLineSplit
         ? data.toString()
         : data
@@ -29,7 +29,7 @@ export default function execProm(command: string, options: Options = {}): Promis
       console.log(noColor ? str : chalk.grey(str));
     });
 
-    proc.stderr!.on('data', function(data) {
+    proc.stderr!.on('data', function (data) {
       const str = noLineSplit
         ? data.toString()
         : data
@@ -40,7 +40,7 @@ export default function execProm(command: string, options: Options = {}): Promis
       console.log(noColor ? str : chalk.red(str));
     });
 
-    proc.once('exit', exitCode => {
+    proc.once('exit', (exitCode) => {
       if (exitCode === 0) {
         console.log(chalk.green(`Command ${chalk.yellow(command)} exited with 0`));
         resolve();

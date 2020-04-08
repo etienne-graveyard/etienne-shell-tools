@@ -5,14 +5,14 @@ import * as parseGitUrl from 'git-url-parse';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ora from 'ora';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { execSync } from 'child_process';
 import gitCloneOrPull from '../utils/gitCloneOrPull';
 import wait from '../utils/wait';
 import execProm from '../utils/execProm';
 import * as inquirer from 'inquirer';
 import writeFileProm from '../utils/writeFileProm';
-import * as got from 'got';
+import got from 'got';
 import * as prettier from 'prettier';
 
 export default class SetupLib extends Command {
@@ -46,7 +46,9 @@ export default class SetupLib extends Command {
       return writeFileProm(path.resolve(cloneResult.targetPath, name), content);
     };
 
-    const infos = await inquirer.prompt<{ description: string }>([{ name: 'description', message: 'Description' }]);
+    const infos = await inquirer.prompt<{ description: string }>([
+      { name: 'description', message: 'Description' },
+    ]);
 
     await createFile(
       'package.json',
@@ -71,7 +73,10 @@ export default class SetupLib extends Command {
     await createFile('.gitignore', await this.getGitIgnore());
     await createFile('LICENSE', this.createLicense());
     await createFile('.cz-config.js', `module.exports = {\n\tscopes: ['${cloneResult.name}'],\n};`);
-    await createFile('jest.config.js', `module.exports = {\n\tpreset: 'ts-jest',\n\ttestEnvironment: 'node',\n};`);
+    await createFile(
+      'jest.config.js',
+      `module.exports = {\n\tpreset: 'ts-jest',\n\ttestEnvironment: 'node',\n};`
+    );
     await createFile('README.md', `# ${cloneResult.name}\n\n${infos.description}`);
     await createFile('tsconfig.json', this.createTsConfig());
     await createFile('.travis.yml', this.createTravisFile());
@@ -177,9 +182,12 @@ SOFTWARE.`;
   }
 
   private createIndex() {
-    return prettier.format(`export function add(left: number, right: number) { return left + right }`, {
-      parser: 'typescript',
-    });
+    return prettier.format(
+      `export function add(left: number, right: number) { return left + right }`,
+      {
+        parser: 'typescript',
+      }
+    );
   }
 
   private createIndexTest() {
@@ -214,7 +222,9 @@ branches:
   }
 
   private async getGitIgnore() {
-    const gitIgnoreContent = await got('https://www.gitignore.io/api/node,macos').then(res => res.body);
+    const gitIgnoreContent = await got('https://www.gitignore.io/api/node,macos').then(
+      (res) => res.body
+    );
     return (
       gitIgnoreContent +
       `

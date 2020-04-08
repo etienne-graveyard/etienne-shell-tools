@@ -2,7 +2,7 @@ import * as parseGitUrl from 'git-url-parse';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ora from 'ora';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import gitClone from './gitClone';
 import gitPull from './gitPull';
 
