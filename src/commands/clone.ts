@@ -1,11 +1,5 @@
 import { Command, flags } from '@oclif/command';
-import gitClone from '../utils/gitClone';
-import gitPull from '../utils/gitPull';
-import * as parseGitUrl from 'git-url-parse';
-import * as path from 'path';
-import * as fs from 'fs';
 import * as ora from 'ora';
-import * as chalk from 'chalk';
 import gitCloneOrPull from '../utils/gitCloneOrPull';
 import wait from '../utils/wait';
 import execProm from '../utils/execProm';
