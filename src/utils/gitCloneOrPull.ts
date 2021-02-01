@@ -1,10 +1,10 @@
-import * as parseGitUrl from 'git-url-parse';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as ora from 'ora';
-import * as chalk from 'chalk';
-import gitClone from './gitClone';
-import gitPull from './gitPull';
+import * as parseGitUrl from "git-url-parse";
+import * as path from "path";
+import * as fs from "fs";
+import * as ora from "ora";
+import * as chalk from "chalk";
+import gitClone from "./gitClone";
+import gitPull from "./gitPull";
 
 function clonableDestination(target: string): boolean {
   const targetExist = fs.existsSync(target);
@@ -16,12 +16,16 @@ function clonableDestination(target: string): boolean {
   return targetEmpty;
 }
 
-export default async function gitCloneOrPull(spinner: ora.Ora, url: string, shallow: boolean) {
+export default async function gitCloneOrPull(
+  spinner: ora.Ora,
+  url: string,
+  shallow: boolean
+) {
   const repo = url;
   const parsed = parseGitUrl(repo);
   const baseDir = path.resolve(`${process.env.HOME}/Workspace`);
 
-  if (parsed.protocol !== 'ssh') {
+  if (parsed.protocol !== "ssh") {
     spinner.fail(`Use ssh ! (you tried to use ${parsed.protocol})`);
     return;
   }
@@ -31,12 +35,12 @@ export default async function gitCloneOrPull(spinner: ora.Ora, url: string, shal
   if (clonableDestination(targetPath)) {
     spinner.info(`Cloning in ${chalk.cyan(relativeDir)}`);
     await gitClone(spinner, repo, targetPath, shallow);
-    spinner.succeed('Cloned');
+    spinner.succeed("Cloned");
   } else {
     spinner.info(`${chalk.cyan(relativeDir)} already exists, pulling repo`);
     try {
       await gitPull(spinner, targetPath);
-      spinner.succeed('Pulled');
+      spinner.succeed("Pulled");
     } catch (error) {
       spinner.fail(error);
     }

@@ -1,9 +1,12 @@
-import * as path from 'path';
-import * as fs from 'fs';
+import * as path from "path";
+import * as fs from "fs";
 
-export default async function writeFileProm(filePath: string, content: string) {
+export default async function writeFileProm(
+  filePath: string,
+  content: string
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, content, err => {
+    fs.writeFile(filePath, content, (err) => {
       if (err) {
         reject(err);
       } else {

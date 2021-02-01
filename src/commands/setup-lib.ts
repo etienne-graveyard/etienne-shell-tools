@@ -1,39 +1,35 @@
-import { Command, flags } from '@oclif/command';
-import gitClone from '../utils/gitClone';
-import gitPull from '../utils/gitPull';
-import * as parseGitUrl from 'git-url-parse';
-import * as path from 'path';
-import * as fs from 'fs';
-import * as ora from 'ora';
-import * as chalk from 'chalk';
-import { execSync } from 'child_process';
-import gitCloneOrPull from '../utils/gitCloneOrPull';
-import wait from '../utils/wait';
-import execProm from '../utils/execProm';
-import * as inquirer from 'inquirer';
-import writeFileProm from '../utils/writeFileProm';
-import got from 'got';
-import * as prettier from 'prettier';
+import { Command, flags } from "@oclif/command";
+import * as path from "path";
+import * as fs from "fs";
+import * as ora from "ora";
+import * as chalk from "chalk";
+import gitCloneOrPull from "../utils/gitCloneOrPull";
+import wait from "../utils/wait";
+import execProm from "../utils/execProm";
+import * as inquirer from "inquirer";
+import writeFileProm from "../utils/writeFileProm";
+import got from "got";
+import * as prettier from "prettier";
 
 export default class SetupLib extends Command {
-  static description = 'setup a typescript library repo';
+  static description = "setup a typescript library repo";
 
   static flags = {
-    help: flags.help({ char: 'h' }),
+    help: flags.help({ char: "h" }),
   };
 
-  static args = [{ name: 'url' }];
+  static args = [{ name: "url" }];
 
   async run() {
     const { args, flags } = this.parse(SetupLib);
 
     if (!args.url) {
-      console.warn('No name provided, update not implemented yet...');
+      console.warn("No name provided, update not implemented yet...");
       return;
     }
 
-    const spinner = ora('Starting...').start();
-    spinner.color = 'blue';
+    const spinner = ora("Starting...").start();
+    spinner.color = "blue";
 
     const cloneResult = await gitCloneOrPull(spinner, args.url, false);
 
@@ -47,56 +43,70 @@ export default class SetupLib extends Command {
     };
 
     const infos = await inquirer.prompt<{ description: string }>([
-      { name: 'description', message: 'Description' },
+      { name: "description", message: "Description" },
     ]);
 
     await createFile(
-      'package.json',
-      await this.createPackageJson(cloneResult.url, cloneResult.name, infos.description)
+      "package.json",
+      await this.createPackageJson(
+        cloneResult.url,
+        cloneResult.name,
+        infos.description
+      )
     );
 
     const devDeps = [
-      '@types/jest',
-      'cz-customizable',
-      'jest',
-      'microbundle',
-      'semantic-release',
-      'ts-jest',
-      'typescript',
+      "@types/jest",
+      "cz-customizable",
+      "jest",
+      "microbundle",
+      "semantic-release",
+      "ts-jest",
+      "typescript",
     ];
 
-    await execProm(`yarn add --dev ${devDeps.join(' ')}`, {
+    await execProm(`yarn add --dev ${devDeps.join(" ")}`, {
       noColor: true,
       cwd: cloneResult.targetPath,
     });
 
-    await createFile('.gitignore', await this.getGitIgnore());
-    await createFile('LICENSE', this.createLicense());
-    await createFile('.cz-config.js', `module.exports = {\n\tscopes: ['${cloneResult.name}'],\n};`);
+    await createFile(".gitignore", await this.getGitIgnore());
+    await createFile("LICENSE", this.createLicense());
     await createFile(
-      'jest.config.js',
+      ".cz-config.js",
+      `module.exports = {\n\tscopes: ['${cloneResult.name}'],\n};`
+    );
+    await createFile(
+      "jest.config.js",
       `module.exports = {\n\tpreset: 'ts-jest',\n\ttestEnvironment: 'node',\n};`
     );
-    await createFile('README.md', `# ${cloneResult.name}\n\n${infos.description}`);
-    await createFile('tsconfig.json', this.createTsConfig());
-    await createFile('.travis.yml', this.createTravisFile());
+    await createFile(
+      "README.md",
+      `# ${cloneResult.name}\n\n${infos.description}`
+    );
+    await createFile("tsconfig.json", this.createTsConfig());
+    await createFile(".travis.yml", this.createTravisFile());
 
-    fs.mkdirSync(path.resolve(cloneResult.targetPath, 'src'));
-    fs.mkdirSync(path.resolve(cloneResult.targetPath, 'tests'));
+    fs.mkdirSync(path.resolve(cloneResult.targetPath, "src"));
+    fs.mkdirSync(path.resolve(cloneResult.targetPath, "tests"));
 
-    await createFile('src/index.ts', this.createIndex());
-    await createFile('tests/index.test.ts', this.createIndexTest());
+    await createFile("src/index.ts", this.createIndex());
+    await createFile("tests/index.test.ts", this.createIndexTest());
 
-    spinner.info('Openning in VS Code...');
+    spinner.info("Openning in VS Code...");
     await Promise.all([wait(500), execProm(`code ${cloneResult.targetPath}`)]);
 
     console.log(chalk.green(`Don't forget to run:`));
     console.log(chalk.yellow(`  npx semantic-release-cli setup`));
 
-    spinner.succeed('All good, Happy coding');
+    spinner.succeed("All good, Happy coding");
   }
 
-  private async createPackageJson(url: string, name: string, description: string) {
+  private async createPackageJson(
+    url: string,
+    name: string,
+    description: string
+  ) {
     return prettier.format(
       `{
       "name": "${name}",
@@ -132,7 +142,7 @@ export default class SetupLib extends Command {
         }
       }
     }`,
-      { parser: 'json' }
+      { parser: "json" }
     );
   }
 
@@ -177,7 +187,7 @@ SOFTWARE.`;
         },
         "exclude": ["node_modules", "dist", ".rpt2_cache", "tests"]
       }`,
-      { parser: 'json' }
+      { parser: "json" }
     );
   }
 
@@ -185,7 +195,7 @@ SOFTWARE.`;
     return prettier.format(
       `export function add(left: number, right: number) { return left + right }`,
       {
-        parser: 'typescript',
+        parser: "typescript",
       }
     );
   }
@@ -199,7 +209,7 @@ SOFTWARE.`;
       })
       `,
       {
-        parser: 'typescript',
+        parser: "typescript",
       }
     );
   }
@@ -222,9 +232,9 @@ branches:
   }
 
   private async getGitIgnore() {
-    const gitIgnoreContent = await got('https://www.gitignore.io/api/node,macos').then(
-      (res) => res.body
-    );
+    const gitIgnoreContent = await got(
+      "https://www.gitignore.io/api/node,macos"
+    ).then((res) => res.body);
     return (
       gitIgnoreContent +
       `
