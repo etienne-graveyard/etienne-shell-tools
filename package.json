@@ -19,33 +19,34 @@
     "prepare": "rm -rf lib && tsc",
     "test": "nyc mocha --forbid-only \"test/**/*.test.ts\"",
     "posttest": "tsc -p test --noEmit",
-    "version": "oclif-dev readme && git add README.md"
+    "version": "oclif-dev readme && git add README.md",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@oclif/command": "^1.7.0",
-    "@oclif/config": "^1.16.0",
-    "@oclif/plugin-help": "^3.1.0",
-    "chalk": "^4.1.0",
-    "git-url-parse": "^11.1.2",
-    "got": "^11.5.1",
-    "inquirer": "^7.3.3",
-    "ora": "^4.0.5",
-    "prettier": "^2.0.5",
-    "tslib": "^2.0.0"
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
+    "chalk": "^4.1.1",
+    "git-url-parse": "^11.4.4",
+    "got": "^11.8.2",
+    "inquirer": "^8.0.0",
+    "ora": "^5.4.0",
+    "prettier": "^2.2.1",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
-    "@oclif/dev-cli": "^1.22.2",
-    "@oclif/test": "^1.2.6",
+    "@oclif/dev-cli": "^1.26.0",
+    "@oclif/test": "^1.2.8",
     "@types/git-url-parse": "^9.0.0",
     "@types/got": "^9.6.11",
-    "@types/inquirer": "^7.3.0",
-    "@types/mocha": "^8.0.1",
-    "@types/node": "^14.0.27",
-    "@types/prettier": "^2.0.2",
-    "globby": "^11.0.1",
-    "mocha": "^8.1.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "@types/inquirer": "^7.3.1",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^15.0.2",
+    "@types/prettier": "^2.2.3",
+    "globby": "^11.0.3",
+    "mocha": "^8.3.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   },
   "engines": {
     "node": ">=8.0.0"
