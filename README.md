@@ -1,1 +1,3 @@
 # Etienne-shell-tools
+
+**DEPRECATED**
